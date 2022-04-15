@@ -14,9 +14,11 @@ You can publish this application with Github Actions.
 
 ## Overview
 
-N+1 problem shooting allows you to finding out transaction candidate which have N+1 problems
+N+1 problem shooting allows you to finding out transaction candidate which have N+1 problems or calling too many same queries
 
 You can improve application related with N+1 problem quickly and efficiently
+
+![N+1](./images/np1-demo.gif "N+1 Demo")
 
 ## Dependencies
 
