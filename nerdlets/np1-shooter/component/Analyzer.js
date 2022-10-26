@@ -59,7 +59,7 @@ export default class Analyzer extends React.Component {
   }
   selectorFilter() {
     return (<NrqlQuery
-      accountId={this.props.account}
+      accountIds={[this.props.account]}
       query={`FROM Transaction SELECT count(*) FACET transactionType WHERE entityGuid='${this.props.entityGuid}'and databaseCallCount >= 10 limit 30 ${this.state.timeRange}`}
     >
       {res => {
@@ -81,7 +81,7 @@ export default class Analyzer extends React.Component {
 
   selector() {
     return (<BarChart
-      accountId={this.props.account}
+      accountIds={[this.props.account]}
       query={`SELECT max(databaseCallCount) FROM Transaction FACET name  WHERE entityGuid='${this.props.entityGuid}'and databaseCallCount >= 10 ${this.getSelectorFilterCondition()} limit 30 ${this.state.timeRange}`}
       fullWidth
       fullHeight
@@ -94,7 +94,7 @@ export default class Analyzer extends React.Component {
       <CardHeader title="Query count Trend"/>
       <CardBody>
         <LineChart
-          accountId={this.props.account}
+          accountIds={[this.props.account]}
           query={`SELECT max(databaseCallCount) FROM Transaction FACET name  WHERE entityGuid='${this.props.entityGuid}'and databaseCallCount >= 10 ${this.getSelectorCondition()} limit 30 TIMESERIES ${this.state.timeRange}`}
           fullWidth
         />
@@ -107,7 +107,7 @@ export default class Analyzer extends React.Component {
       <CardHeader title="Query count Histogram"/>
       <CardBody>
         <HistogramChart
-          accountId={this.props.account}
+          accountIds={[this.props.account]}
           query={`SELECT histogram(databaseCallCount, width:100, buckets:5) FROM Transaction  WHERE entityGuid='${this.props.entityGuid}' and databaseCallCount >= 10 ${this.getSelectorCondition()} ${this.state.timeRange}`}
           fullWidth
         />
@@ -119,7 +119,7 @@ export default class Analyzer extends React.Component {
     const {timeRange} = this.state;
     const {account, entityGuid} = this.props;
     return (<NrqlQuery
-      accountId={this.props.account}
+      accountIds={[this.props.account]}
       query={`SELECT max(databaseCallCount) FROM Transaction FACET timestamp, entityGuid, traceId,name  WHERE entityGuid='${entityGuid}'and databaseCallCount >= 10 ${this.getSelectorCondition()} limit 30 ${timeRange}`}
     >
       {({data}) => {
@@ -127,7 +127,7 @@ export default class Analyzer extends React.Component {
           // change colors to a nice pink.
           const traceIds = data.map(({metadata}) => metadata.groups.find(g => g.name === 'traceId').value).map(id => `'${id}'`);
           return <NrqlQuery
-            accountId={account}
+            accountIds={[account]}
             query={`FROM Span SELECT count(*) as cnt FACET traceId, db.statement limit 500 WHERE traceId in (${traceIds}) ${timeRange}`}
           >
             {res => {
